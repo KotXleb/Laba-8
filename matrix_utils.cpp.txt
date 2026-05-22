@@ -1,0 +1,62 @@
+#include "matrix_utils.h"
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+// Читання матриці розміром M x N
+bool readMatrix(const string& filename, double matrix[100][100], int& M, int& N) {
+    ifstream fin(filename);
+    if (!fin) return false;
+    fin >> M >> N;
+    for (int i = 0; i < M; i++) {
+        for (int j = 0; j < N; j++) {
+            fin >> matrix[i][j];
+        }
+    }
+    fin.close();
+    return true;
+}
+
+// Обробка: підрахунок у кожному стовпці елементів, що більші за середнє стовпця
+void processMatrix(double matrix[100][100], int M, int N, int result[]) {
+    for (int j = 0; j < N; j++) {
+        double sum = 0;
+        for (int i = 0; i < M; i++) sum += matrix[i][j];
+
+        double avg = sum / M; // Середнє значення стовпця
+        int count = 0;
+
+        for (int i = 0; i < M; i++) {
+            if (matrix[i][j] > avg) count++;
+        }
+        result[j] = count; // Записуємо кількість у підсумковий масив
+    }
+}
+
+// Запис результатів У ТОЙ САМИЙ ФАЙЛ (ios::app означає "додати в кінець")
+void appendMatrixResult(const string& filename, int result[], int N) {
+    ofstream fout(filename, ios::app); 
+    fout << "\nКількість елементів більших за середнє у стовпцях:\n";
+    for (int j = 0; j < N; j++) fout << result[j] << " ";
+    fout.close();
+}
+
+// Менеджер другого завдання
+void runTask2() {
+    string file;
+    cout << "Введіть ім'я файлу з матрицею: ";
+    cin >> file;
+
+    double matrix[100][100];
+    int M, N;
+    int result[100];
+
+    if (readMatrix(file, matrix, M, N)) {
+        processMatrix(matrix, M, N, result);
+        appendMatrixResult(file, result, N);
+        cout << "Результати додано у файл " << file << endl;
+    } else {
+        cout << "Помилка читання матриці!" << endl;
+    }
+}

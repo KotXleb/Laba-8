@@ -1,0 +1,20 @@
+#ifndef MATRIX_UTILS_H // Захист: запобігає конфліктам, якщо файл підключається кілька разів
+#define MATRIX_UTILS_H
+
+#include <string>
+
+// --- ЗАВДАННЯ 2 (Матриці) ---
+
+// Головна функція-менеджер для другого завдання
+void runTask2();
+
+// Зчитування матриці (передаємо масив 100х100 та посилання на розміри M і N)
+bool readMatrix(const std::string& filename, double matrix[100][100], int& M, int& N);
+
+// Обчислення кількості елементів, більших за середнє по стовпцях
+void processMatrix(double matrix[100][100], int M, int N, int result[]);
+
+// Спеціальна функція для ДОПИСУ (append) результату в кінець того ж файлу
+void appendMatrixResult(const std::string& filename, int result[], int N);
+
+#endif // Кінець захисту MATRIX_UTILS_H

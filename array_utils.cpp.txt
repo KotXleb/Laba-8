@@ -1,0 +1,120 @@
+#include "array_utils.h"
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+// --- ЗАВДАННЯ 1 ---
+// Функція зчитування масиву цілих чисел з файлу
+bool readArray(const string& filename, int*& arr, int& n) {
+    ifstream fin(filename);
+    if (!fin) return false; // Перевірка, чи відкрився файл
+
+    fin >> n; // Зчитування розміру масиву
+    if (n <= 0) return false;
+
+    arr = new int[n]; // Динамічне виділення пам'яті під масив
+    for (int i = 0; i < n; i++) fin >> arr[i]; // Зчитування елементів
+
+    fin.close();
+    return true;
+}
+
+// Алгоритм перетворення за лаб. №6: вставка першого елемента на позицію після менших
+void processArrayTask1(int arr[], int n) {
+    if (n <= 0) return;
+    int temp = arr[0]; // Запам'ятовуємо перший елемент
+    int i = 1;
+    // Шукаємо позицію для вставки
+    while (i < n && arr[i] < temp) {
+        arr[i - 1] = arr[i]; // Зсуваємо елементи вліво
+        i++;
+    }
+    arr[i - 1] = temp; // Ставимо початковий елемент на знайдене місце
+}
+
+// Запис масиву у вихідний файл
+void writeArray(const string& filename, int arr[], int n) {
+    ofstream fout(filename);
+    for (int i = 0; i < n; i++) fout << arr[i] << " ";
+        fout.close();
+}
+
+// Функція-обгортка для запуску Завдання 1
+void runTask1() {
+    string inFile, outFile;
+    cout << "Введіть ім'я вхідного файлу (напр., array_in_4.txt): ";
+    cin >> inFile;
+    cout << "Введіть ім'я вихідного файлу (напр., array_out_4.txt): ";
+    cin >> outFile;
+
+    int* arr = nullptr;
+    int n;
+
+    if (readArray(inFile, arr, n)) {
+        processArrayTask1(arr, n);
+        writeArray(outFile, arr, n);
+        cout << "Завдання 1 виконано. Результат у файлі " << outFile << endl;
+        delete[] arr; // Обов'язкове звільнення пам'яті
+    }
+    else {
+        cout << "Помилка читання файлу " << inFile << endl;
+    }
+}
+
+// --- ЗАВДАННЯ 3 ---
+// Зчитування символьного масиву для сортування
+bool readCharArray(const string& filename, char*& arr, int& n) {
+    ifstream fin(filename);
+    if (!fin) return false;
+    fin >> n;
+    if (n <= 0) return false;
+    arr = new char[n];
+    for (int i = 0; i < n; i++) fin >> arr[i];
+        fin.close();
+    return true;
+}
+
+// Реалізація алгоритму "Подвійний вибір" для сортування за зменшенням
+void doubleSelectionSortDescending(char arr[], int n) {
+    int left = 0, right = n - 1;
+    while (left < right) {
+        int maxIdx = left, minIdx = left;
+        // За один прохід шукаємо і максимум, і мінімум
+        for (int i = left; i <= right; ++i) {
+            if (arr[i] > arr[maxIdx]) maxIdx = i; // Для зменшення максимум іде вліво
+            if (arr[i] < arr[minIdx]) minIdx = i; // Мінімум іде вправо
+        }
+
+        swap(arr[left], arr[maxIdx]); // Ставимо найбільший на ліву межу
+        // Корекція, якщо мінімум був на місці left (яке ми щойно змінили)
+        if (minIdx == left) minIdx = maxIdx;
+
+        swap(arr[right], minIdx); // Ставимо найменший на праву межу
+
+        left++;  // Звужуємо область пошуку
+        right--;
+    }
+}
+
+// Запуск сортування символів
+void runTask3() {
+    string inFile, outFile;
+    cout << "Введіть ім'я файлу для сортування (напр., sort_in_4.txt): ";
+    cin >> inFile;
+    cout << "Введіть ім'я вихідного файлу (напр., sort_out_4.txt): ";
+    cin >> outFile;
+
+    char* arr = nullptr;
+    int n;
+
+    if (readCharArray(inFile, arr, n)) {
+        doubleSelectionSortDescending(arr, n);
+        writeCharArray(outFile, arr, n);
+        cout << "Завдання 3 виконано. Результат у файлі " << outFile << endl;
+        delete[] arr; // Звільнення динамічної пам'яті
+    }
+    else {
+        cout << "Помилка читання файлу " << inFile << endl;
+    }
+}

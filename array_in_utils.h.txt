@@ -1,0 +1,35 @@
+#ifndef ARRAY_UTILS_H // "Захист від подвійного включення": перевіряє, чи не завантажений цей файл уже
+#define ARRAY_UTILS_H // Якщо ні — завантажує його
+
+#include <string> // Потрібен для використання типу std::string
+
+// --- ЗАВДАННЯ 1 (Цілі числа) ---
+
+// Функція для запуску всього ланцюжка першого завдання
+void runTask1();
+
+// Зчитування: повертає true/false залежно від успіху, заповнює вказівник arr та розмір n
+bool readArray(const std::string& filename, int*& arr, int& n);
+
+// Основна логіка обробки за варіантом
+void processArrayTask1(int arr[], int n);
+
+// Запис зміненого масиву у файл
+void writeArray(const std::string& filename, int arr[], int n);
+
+
+// --- ЗАВДАННЯ 3 (Символи) ---
+
+// Функція для запуску сортування за 4-м варіантом
+void runTask3();
+
+// Зчитування масиву символів
+bool readCharArray(const std::string& filename, char*& arr, int& n);
+
+// Алгоритм "Подвійний вибір" (Double Selection Sort) для char
+void doubleSelectionSortDescending(char arr[], int n);
+
+// Запис відсортованих символів у файл
+void writeCharArray(const std::string& filename, char arr[], int n);
+
+#endif // Кінець захисту ARRAY_UTILS_H
